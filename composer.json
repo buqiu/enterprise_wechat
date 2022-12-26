@@ -1,0 +1,19 @@
+{
+  "name": "buqiu/enterprise_wechat",
+  "type": "library",
+  "description": "official lib of enterprise wechat api https://work.weixin.qq.com/api/doc",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "eva",
+      "email": "sh_xll@foxmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Buqiu\\EnterpriseWechat\\": "src/"
+    }
+  },
+  "require": {
+  }
+}
