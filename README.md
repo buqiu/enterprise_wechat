@@ -7,7 +7,7 @@ composer require buqiu/enterprise_wechat
 ```
 2. publish the package configuration file config/qy.php
 ```shell
-php artisan vendor:publish --provider="Enterprise\Wechat\EnterpriseWechatServiceProvider"
+php artisan vendor:publish
 ```
 3. edit config
 ```php
