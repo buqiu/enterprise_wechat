@@ -5,7 +5,7 @@ namespace Buqiu\EnterpriseWechat\Callback;
 class ExternalContactChange
 {
     // 添加企业客户事件
-    public static function add($xmlArray): bool
+    public static function add($xmlArray)
     {
         if (empty($xmlArray['Event']) || empty($xmlArray['ChangeType'])) {
             return false;
