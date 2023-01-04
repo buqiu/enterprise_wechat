@@ -57,7 +57,7 @@ class ExternalContact
             return false;
         }
 
-        if (!in_array($xmlArray['ChangeType'], self::$changeTypeMap)) {
+        if (!in_array($xmlArray['ChangeType'], array_keys(self::$changeTypeMap))) {
             return false;
         }
 

@@ -39,10 +39,10 @@ class CorpTag
         }
 
         return [
-            'changeType' => self::$changeTypeMap['ChangeType'] ?? 0,
+            'changeType' => self::$changeTypeMap[$xmlArray['ChangeType']] ?? 0,
             'tagType'    => self::$tagTypeMap[$xmlArray['TagType']] ?? 0,
             'id'         => $xmlArray['Id'],
-            'strategyId' => $xmlArray['StrategyId']
+            'strategyId' => $xmlArray['StrategyId'] ?? 0,
         ];
     }
 
@@ -57,7 +57,7 @@ class CorpTag
             return false;
         }
 
-        if (!in_array($xmlArray['ChangeType'], self::$changeTypeMap)) {
+        if (!in_array($xmlArray['ChangeType'], array_keys(self::$changeTypeMap))) {
             return false;
         }
 
