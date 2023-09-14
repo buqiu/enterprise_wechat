@@ -44,6 +44,8 @@ abstract class Api
     const MARK_CORP_TAG = '/cgi-bin/externalcontact/mark_tag?access_token=ACCESS_TOKEN';
     // 创建企业群发
     const ADD_MSG_TEMPLATE = '/cgi-bin/externalcontact/add_msg_template?access_token=ACCESS_TOKEN';
+    // 应用消息推送
+    const MESSAGE_SEND = '/cgi-bin/message/send?access_token=ACCESS_TOKEN';
 
     // 获取应用 access token
     protected function getAccessToken()
@@ -130,7 +132,7 @@ abstract class Api
             if (strpos($this->rspRawStr, "errcode") !== false) {
                 $errCode = Utils::arrayIsExist($this->rspJson, "errcode");
                 if ($errCode == 40014 || $errCode == 42001 || $errCode == 42007 || $errCode == 42009) {
-                    if ("NO_TOKEN" != $tokenType && true == $refreshTokenWhenExpired) {
+                    if ("NO_TOKEN" != $tokenType && $refreshTokenWhenExpired) {
                         if ("ACCESS_TOKEN" == $tokenType) {
                             $this->refreshAccessToken();
                         }

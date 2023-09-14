@@ -1,32 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Buqiu\EnterpriseWechat\Api;
 
+use Buqiu\EnterpriseWechat\Api\DataStructure\AddressBook;
+use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\ExternalContact;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\MessagePush\AddMsgTemplate;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\Tag\CorpTag;
-use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\ExternalContact;
+use Buqiu\EnterpriseWechat\Api\DataStructure\SendMessage;
+use Buqiu\EnterpriseWechat\Utils\ErrorHelper\ApiError;
 use Buqiu\EnterpriseWechat\Utils\HttpUtils;
 use Buqiu\EnterpriseWechat\Utils\Utils;
-use Buqiu\EnterpriseWechat\Utils\ErrorHelper\ApiError;
-use Exception;
 
 class CorpApi extends Api
 {
-    private   $corpId;
-    private   $secret;
-    protected $accessToken = null;
+    protected $accessToken;
+    private $corpId;
+    private $secret;
 
     /**
-     * 企业进行自定义开发调用, 无需关注 accessToken, 会自动获取并刷新
+     * 企业进行自定义开发调用, 无需关注 accessToken, 会自动获取并刷新.
      *
-     * @param string $corpId : 企业 ID
-     * @param string $secret : 应用的凭证密钥
-     * @throws Exception
+     * @param  string     $corpId : 企业 ID
+     * @param  string     $secret : 应用的凭证密钥
+     * @throws \Exception
      */
     public function __construct(string $corpId, string $secret)
     {
-        Utils::checkNotEmptyStr($corpId, "corpid");
-        Utils::checkNotEmptyStr($secret, "secret");
+        Utils::checkNotEmptyStr($corpId, 'corpid');
+        Utils::checkNotEmptyStr($secret, 'secret');
         $this->corpId = $corpId;
         $this->secret = $secret;
     }
@@ -34,36 +37,17 @@ class CorpApi extends Api
     // ------------------------- access token ---------------------------------
 
     /**
-     * 获取 accessToken, 不用主动调用
-     * @return void|null
-     * @throws Exception
+     * 获取 accessToken.
+     * @return null|void
+     * @throws \Exception
      */
-    protected function getAccessToken()
+    public function getAccessToken()
     {
         if (!Utils::notEmptyStr($this->accessToken)) {
             $this->refreshAccessToken();
         }
+
         return $this->accessToken;
-    }
-
-    /**
-     * 刷新 accessToken
-     * @throws Exception
-     */
-    protected function refreshAccessToken()
-    {
-        if (!Utils::notEmptyStr($this->corpId) || !Utils::notEmptyStr($this->secret)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::ILLEGAL_CORP_ID_OR_SECRET]);
-        }
-
-        $url = HttpUtils::makeUrl(self::GET_TOKEN);
-        $url = str_replace("CORP_ID", $this->corpId, $url);
-        $url = str_replace("SECRET", $this->secret, $url);
-
-        $this->_httpGetParseToJson($url);
-        $this->_checkErrCode();
-
-        $this->accessToken = $this->rspJson["access_token"];
     }
 
     // ------------------------- 【客户联系】客户管理 ---------------------------------
@@ -72,6 +56,7 @@ class CorpApi extends Api
     public function getFollowUserList(): ExternalContact
     {
         self::_httpCall(self::GET_FOLLOW_USER_LIST, 'GET', []);
+
         return ExternalContact::handleGetFollowUserRsp($this->rspJson);
     }
 
@@ -81,6 +66,7 @@ class CorpApi extends Api
         ExternalContact::checkGetListArgs($externalContact);
         $args = ExternalContact::handleGetListArgs($externalContact);
         self::_httpCall(self::GET_EXTERNAL_CONTACT_LIST, 'GET', $args);
+
         return ExternalContact::handleGetListRsp($this->rspJson);
     }
 
@@ -146,6 +132,7 @@ class CorpApi extends Api
                 $args['cursor'] = $nextCursor;
             } while (!empty($nextCursor));
         }
+
         return $r;
     }
 
@@ -156,6 +143,7 @@ class CorpApi extends Api
     {
         $filter = CorpTag::handleListArgs($corpTag);
         self::_httpCall(self::GET_CORP_TAG_LIST, 'POST', $filter);
+
         return CorpTag::handleListRsp($this->rspJson);
     }
 
@@ -165,6 +153,7 @@ class CorpApi extends Api
         CorpTag::checkAddArgs($tags);
         $args = CorpTag::handleAddArgs($tags);
         self::_httpCall(self::ADD_CORP_TAG, 'POST', $args);
+
         return CorpTag::handleAddRsp($this->rspJson);
     }
 
@@ -200,6 +189,145 @@ class CorpApi extends Api
         AddMsgTemplate::checkArgs($msgTemplate);
         $args = AddMsgTemplate::handleArgs($msgTemplate);
         self::_httpCall(self::ADD_MSG_TEMPLATE, 'POST', $args);
+
         return AddMsgTemplate::handleRsp($this->rspJson);
+    }
+
+    // ------------------------- 【企业内部】消息推送 ---------------------------------
+
+    // 应用内部参数
+    public function sendMessage(SendMessage $sendMessage): SendMessage
+    {
+        SendMessage::checkSendMsgArgs($sendMessage);
+        $args = SendMessage::sendMessage2Array($sendMessage);
+        self::_httpCall(self::MESSAGE_SEND, 'POST', $args);
+
+        return SendMessage::responseArray2SendMessage($this->rspJson);
+    }
+
+    // ------------------------- 【企业内部】部门信息 ---------------------------------
+
+    /**
+     * @note   getDepartment 获取部门列表
+     * @author Lu
+     *
+     * @param  mixed      $departmentId
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getDepartment($departmentId = 0)
+    {
+        return AddressBook::getDepartmentList($this->getAccessToken(), $departmentId);
+    }
+
+    /**
+     * @note   getUserSimpleList 获取成员列表
+     * @author Lu
+     *
+     * @param  mixed      $departmentId
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getUserSimpleList($departmentId)
+    {
+        return AddressBook::getUserSimpleList($this->getAccessToken(), $departmentId);
+    }
+
+    /**
+     * @note   getUserSimpleDetailList 获取成员详情
+     * @author Lu
+     *
+     * @param $departmentId
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getUserSimpleDetailList($departmentId)
+    {
+        return AddressBook::getUserSimpleDetailList($this->getAccessToken(), $departmentId);
+    }
+
+    /**
+     * @note   getUserOpenid 获取用户openid
+     * @author Lu
+     *
+     * @param $code
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getUserOpenid($code)
+    {
+        return AddressBook::getUserAuth($this->getAccessToken(), $code);
+    }
+
+    /**
+     * @note   getUserDetail web端，扫码获取用户信息
+     * @author Lu
+     *
+     * @param $code
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getUserDetail($code)
+    {
+        return AddressBook::getUserAuth($this->getAccessToken(), $code);
+    }
+
+    /**
+     * @note   h5AuthUserInfo h5 授权获取用户信息
+     * @author Lu
+     *
+     * @param $code
+     * @return mixed
+     * @throws \Exception
+     */
+    public function h5AuthUserInfo($code)
+    {
+        return AddressBook::h5AuthUserDetail($this->getAccessToken(), $code);
+    }
+
+    /**
+     * @note   h5AuthUserDetail h5 授权获取用户敏感信息
+     * @author Lu
+     *
+     * @param $userTicket
+     * @return mixed
+     * @throws \Exception
+     */
+    public function h5AuthUserDetail($userTicket)
+    {
+        return AddressBook::h5AuthUserDetail($this->getAccessToken(), $userTicket);
+    }
+
+    /**
+     * @note   getUserInfoById 通过用户id，读取用户信息
+     * @author Lu
+     *
+     * @param $userId
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getUserInfoById($userId)
+    {
+        return AddressBook::getUserInfoById($this->getAccessToken(), $userId);
+    }
+
+    /**
+     * 刷新 accessToken.
+     * @throws \Exception
+     */
+    protected function refreshAccessToken()
+    {
+        if (!Utils::notEmptyStr($this->corpId) || !Utils::notEmptyStr($this->secret)) {
+            throw new \Exception(ApiError::ERR_MSG[ApiError::ILLEGAL_CORP_ID_OR_SECRET]);
+        }
+
+        $url = HttpUtils::makeUrl(self::GET_TOKEN);
+        $url = str_replace('CORP_ID', $this->corpId, $url);
+        $url = str_replace('SECRET', $this->secret, $url);
+
+        $this->_httpGetParseToJson($url);
+        $this->_checkErrCode();
+
+        $this->accessToken = $this->rspJson['access_token'];
     }
 }
