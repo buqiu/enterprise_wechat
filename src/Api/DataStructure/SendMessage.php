@@ -48,7 +48,7 @@ class SendMessage
     {
         Utils::checkNotEmptyStr($msg->msgType, 'msgtype');
         Utils::checkNotEmptyStr($msg->agentId, 'agentid');
-        Utils::checkNotEmptyStr($msg->content, 'content');
+        Utils::checkNotEmptyArray($msg->content, 'content');
     }
 
 
@@ -63,11 +63,11 @@ class SendMessage
         $args = [];
 
         Utils::setIfNotNull($sendMessage->toUser, "touser", $args);
-        Utils::setIfNotNull($sendMessage->toParty, "touser", $args);
+        Utils::setIfNotNull($sendMessage->toParty, "toparty", $args);
         Utils::setIfNotNull($sendMessage->toTag, "totag", $args);
         Utils::setIfNotNull($sendMessage->msgType, "msgtype", $args);
         Utils::setIfNotNull($sendMessage->agentId, "agentid", $args);
-        Utils::setIfNotNull($sendMessage->safe, "save", $args);
+        Utils::setIfNotNull($sendMessage->safe, "safe", $args);
         Utils::setIfNotNull($sendMessage->enableIdTrans, "enable_id_trans", $args);
         Utils::setIfNotNull($sendMessage->enableDuplicateCheck, "enable_duplicate_check", $args);
         Utils::setIfNotNull($sendMessage->duplicateCheckInterval, "duplicate_check_interval", $args);
@@ -118,9 +118,40 @@ class SendMessage
     {
         switch ($msgType) {
             case 'text':
-                Utils::setIfNotNull(['content' => $sendMessage->content], "text", $args);
+                // 文本
+                Utils::setIfNotNull($sendMessage->content, "text", $args);
                 break;
             case "image":
+                // 图片
+                Utils::setIfNotNull($sendMessage->content, "image", $args);
+                break;
+            case "textcard":
+                // 文本卡片
+                Utils::setIfNotNull($sendMessage->content,'textcard',$args);
+                break;
+            case "voice":
+                //语音消息
+                Utils::setIfNotNull($sendMessage->content,'voice',$args);
+                break;
+            case "video":
+                // 视频消息
+                Utils::setIfNotNull($sendMessage->content,'video',$args);
+                break;
+            case "file":
+                // 文件消息
+                Utils::setIfNotNull($sendMessage->content,'file',$args);
+                break;
+            case "news":
+                // 图文消息
+                Utils::setIfNotNull($sendMessage->content,'news',$args);
+                break;
+            case "mpnews":
+                // 图文消息（mpnews）
+                Utils::setIfNotNull($sendMessage->content,'mpnews',$args);
+                break;
+            case "markdown":
+                // markdown消息
+                Utils::setIfNotNull($sendMessage->content,'markdown',$args);
                 break;
         }
     }
