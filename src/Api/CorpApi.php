@@ -13,6 +13,7 @@ use Buqiu\EnterpriseWechat\Api\DataStructure\SendMessage;
 use Buqiu\EnterpriseWechat\Utils\ErrorHelper\ApiError;
 use Buqiu\EnterpriseWechat\Utils\HttpUtils;
 use Buqiu\EnterpriseWechat\Utils\Utils;
+use Exception;
 
 class CorpApi extends Api
 {
@@ -25,7 +26,7 @@ class CorpApi extends Api
      *
      * @param  string     $corpId : 企业 ID
      * @param  string     $secret : 应用的凭证密钥
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(string $corpId, string $secret)
     {
@@ -40,7 +41,7 @@ class CorpApi extends Api
     /**
      * 获取 accessToken.
      * @return null|void
-     * @throws \Exception
+     * @throws Exception
      */
     public function getAccessToken()
     {
@@ -142,10 +143,10 @@ class CorpApi extends Api
      * @author eva
      *
      * @param Remark $remark
-     * @return ExternalContact
-     * @throws \Exception
+     * @return array
+     * @throws Exception
      */
-    public function remark(Remark $remark): ExternalContact
+    public function remark(Remark $remark): array
     {
         Remark::checkRemarkArgs($remark);
         $args = Remark::handleRemarkArgs($remark);
@@ -231,7 +232,7 @@ class CorpApi extends Api
      *
      * @param  mixed      $departmentId
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getDepartment($departmentId = 0)
     {
@@ -244,7 +245,7 @@ class CorpApi extends Api
      *
      * @param  mixed      $departmentId
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUserSimpleList($departmentId)
     {
@@ -257,7 +258,7 @@ class CorpApi extends Api
      *
      * @param $departmentId
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUserSimpleDetailList($departmentId)
     {
@@ -270,7 +271,7 @@ class CorpApi extends Api
      *
      * @param $code
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUserOpenid($code)
     {
@@ -283,7 +284,7 @@ class CorpApi extends Api
      *
      * @param $code
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUserDetail($code)
     {
@@ -296,7 +297,7 @@ class CorpApi extends Api
      *
      * @param $code
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function h5AuthUserInfo($code)
     {
@@ -309,7 +310,7 @@ class CorpApi extends Api
      *
      * @param $userTicket
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function h5AuthUserDetail($userTicket)
     {
@@ -322,7 +323,7 @@ class CorpApi extends Api
      *
      * @param $userId
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getUserInfoById($userId)
     {
@@ -331,12 +332,12 @@ class CorpApi extends Api
 
     /**
      * 刷新 accessToken.
-     * @throws \Exception
+     * @throws Exception
      */
     protected function refreshAccessToken()
     {
         if (!Utils::notEmptyStr($this->corpId) || !Utils::notEmptyStr($this->secret)) {
-            throw new \Exception(ApiError::ERR_MSG[ApiError::ILLEGAL_CORP_ID_OR_SECRET]);
+            throw new Exception(ApiError::ERR_MSG[ApiError::ILLEGAL_CORP_ID_OR_SECRET]);
         }
 
         $url = HttpUtils::makeUrl(self::GET_TOKEN);
