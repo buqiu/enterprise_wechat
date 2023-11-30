@@ -7,6 +7,7 @@ namespace Buqiu\EnterpriseWechat\Api;
 use Buqiu\EnterpriseWechat\Api\DataStructure\AddressBook;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\ExternalContact;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\MessagePush\AddMsgTemplate;
+use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\Remark;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\Tag\CorpTag;
 use Buqiu\EnterpriseWechat\Api\DataStructure\SendMessage;
 use Buqiu\EnterpriseWechat\Utils\ErrorHelper\ApiError;
@@ -134,6 +135,23 @@ class CorpApi extends Api
         }
 
         return $r;
+    }
+
+    /**
+     * @note 修改客户备注信息
+     * @author eva
+     *
+     * @param Remark $remark
+     * @return ExternalContact
+     * @throws \Exception
+     */
+    public function remark(Remark $remark): ExternalContact
+    {
+        Remark::checkRemarkArgs($remark);
+        $args = Remark::handleRemarkArgs($remark);
+        self::_httpCall(self::REMARK, 'POST', $args);
+
+        return $this->rspJson;
     }
 
     // ------------------------- 【客户联系】客户标签管理 ---------------------------------

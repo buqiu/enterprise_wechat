@@ -32,6 +32,12 @@ abstract class Api
     const GET_EXTERNAL_CONTACT_INFO = '/cgi-bin/externalcontact/get?access_token=ACCESS_TOKEN';
     // 批量获取客户详情
     const BATCH_GET_EXTERNAL_CONTACTS = '/cgi-bin/externalcontact/batch/get_by_user?access_token=ACCESS_TOKEN';
+
+    /**
+     * 修改客户备注信息
+     */
+    const REMARK = '/cgi-bin/externalcontact/remark?access_token=ACCESS_TOKEN';
+
     // 获取企业标签库
     const GET_CORP_TAG_LIST = '/cgi-bin/externalcontact/get_corp_tag_list?access_token=ACCESS_TOKEN';
     // 添加企业客户标签
