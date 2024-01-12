@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @note   AddressBook${CARET}
  * @author Lu
@@ -9,98 +12,96 @@ namespace Buqiu\EnterpriseWechat\Api\DataStructure;
 use Buqiu\EnterpriseWechat\Utils\ErrorHelper\ApiError;
 use Buqiu\EnterpriseWechat\Utils\HttpUtils;
 use Buqiu\EnterpriseWechat\Utils\Utils;
-use Exception;
 
 class AddressBook
 {
     // 获取所有部门
-    const DEPARTMENT_URL = 'https://qyapi.weixin.qq.com/cgi-bin/department/list';
+    public const DEPARTMENT_URL = 'https://qyapi.weixin.qq.com/cgi-bin/department/list';
 
     // 获取部门下的成员
-    const USER_SIMPLE_URL = 'https://qyapi.weixin.qq.com/cgi-bin/user/simplelist';
+    public const USER_SIMPLE_URL = 'https://qyapi.weixin.qq.com/cgi-bin/user/simplelist';
     // 获取用户唯一标识
-    const USER_INFO_URL = 'https://qyapi.weixin.qq.com/cgi-bin/auth/getuserinfo';
+    public const USER_INFO_URL = 'https://qyapi.weixin.qq.com/cgi-bin/auth/getuserinfo';
     // 获取部门下成员的详情信息
-    const USER_SIMPLE_DETAIL_URL = 'https://qyapi.weixin.qq.com/cgi-bin/user/list';
+    public const USER_SIMPLE_DETAIL_URL = 'https://qyapi.weixin.qq.com/cgi-bin/user/list';
 
     // 网页授权，获取用户信息
-    const H5_AUTH_USERINFO = 'https://qyapi.weixin.qq.com/cgi-bin/auth/getuserinfo';
+    public const H5_AUTH_USERINFO = 'https://qyapi.weixin.qq.com/cgi-bin/auth/getuserinfo';
 
-    //获取访问用户敏感信息
-    const AUTH_USER_DETAIL = 'https://qyapi.weixin.qq.com/cgi-bin/auth/getuserdetail';
+    // 获取访问用户敏感信息
+    public const AUTH_USER_DETAIL = 'https://qyapi.weixin.qq.com/cgi-bin/auth/getuserdetail';
 
     // 读取成员
-    const CGI_BIN_USER = 'https://qyapi.weixin.qq.com/cgi-bin/user/get';
-
+    public const CGI_BIN_USER = 'https://qyapi.weixin.qq.com/cgi-bin/user/get';
 
     /**
      * @note   getDepartmentList 获取所有部门
      * @author Lu
      *
      * @param $token
+     * @param  int        $departmentId
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getDepartmentList($token, int $departmentId = 0)
     {
         $parameter = '?access_token='.$token;
-        if($departmentId != 0){
-            $parameter.='&id='.$departmentId;
+        if (0 != $departmentId) {
+            $parameter .= '&id='.$departmentId;
         }
 
         $result = HttpUtils::httpGet(self::DEPARTMENT_URL.$parameter);
 
         if (!Utils::notEmptyStr($result)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
         }
 
         return json_decode($result, true);
-
     }
 
     /**
      * @note   getUserSimpleList 获取部门下的成员
      * @author Lu
      *
-     * @param     $token
-     * @param int $departmentId
+     * @param             $token
+     * @param  int        $departmentId
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUserSimpleList($token, int $departmentId = 0)
     {
         $parameter = '?access_token='.$token;
-        if($departmentId != 0){
-            $parameter.='&department_id='.$departmentId;
+        if (0 != $departmentId) {
+            $parameter .= '&department_id='.$departmentId;
         }
         $result = HttpUtils::httpGet(self::USER_SIMPLE_URL.$parameter);
 
         if (!Utils::notEmptyStr($result)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
         }
+
         return json_decode($result, true);
     }
-
 
     /**
      * @note   getUserSimpleDetailList 获取部门下的详情成员
      * @author Lu
      *
-     * @param     $token
-     * @param int $departmentId
+     * @param             $token
+     * @param  int        $departmentId
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUserSimpleDetailList($token, int $departmentId = 0)
     {
         $parameter = '?access_token='.$token;
-        if($departmentId != 0){
-            $parameter.='&department_id='.$departmentId;
+        if (0 != $departmentId) {
+            $parameter .= '&department_id='.$departmentId;
         }
         $result = HttpUtils::httpGet(self::USER_SIMPLE_DETAIL_URL.$parameter);
 
         if (!Utils::notEmptyStr($result)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
         }
 
         return json_decode($result, true);
@@ -113,18 +114,17 @@ class AddressBook
      * @param $token
      * @param $code
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUserAuth($token, $code)
     {
         $result = HttpUtils::httpGet(self::USER_INFO_URL.'?access_token='.$token.'&code='.$code);
 
         if (!Utils::notEmptyStr($result)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
         }
 
         return json_decode($result, true);
-
     }
 
     /**
@@ -134,14 +134,14 @@ class AddressBook
      * @param $token
      * @param $code
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public static function h5AuthUserInfo($token, $code)
     {
         $result = HttpUtils::httpGet(self::H5_AUTH_USERINFO.'?access_token='.$token.'&code='.$code);
 
         if (!Utils::notEmptyStr($result)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
         }
 
         return json_decode($result, true);
@@ -154,7 +154,7 @@ class AddressBook
      * @param $token
      * @param $userTicket
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public static function h5AuthUserDetail($token, $userTicket)
     {
@@ -162,8 +162,9 @@ class AddressBook
 
         $result = HttpUtils::httpPost($url, ['user_ticket' => $userTicket]);
         if (!Utils::notEmptyStr($result)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
         }
+
         return json_decode($result, true);
     }
 
@@ -174,14 +175,14 @@ class AddressBook
      * @param $token
      * @param $userId
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public static function getUserInfoById($token, $userId)
     {
         $result = HttpUtils::httpGet(self::CGI_BIN_USER.'?access_token='.$token.'&userid='.$userId);
 
         if (!Utils::notEmptyStr($result)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
         }
 
         return json_decode($result, true);

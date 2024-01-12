@@ -1,25 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Buqiu\EnterpriseWechat\Utils\ErrorHelper;
 
 class CryptError
 {
-    const VALIDATE_SIGNATURE_ERR = 20001;
-    const COMPUTE_SIGNATURE_ERR  = 20002;
-    const ILLEGAL_AES_KEY        = 20003;
-    const VALIDATE_CORP_ID_ERR   = 20004;
-    const ENCRYPT_AES_ERR        = 20005;
-    const DECRYPT_AES_ERR        = 20006;
-    const ILLEGAL_BUFFER         = 20007;
-    const ENCODE_BASE64_ERR      = 20008;
-    const DECODE_BASE64_ERR      = 20009;
-    const PARSE_XML_ERR          = 20010;
-    const GEN_XML_ERR            = 20011;
-    const GEN_JSON_ERR           = 20012;
-    const PARSE_JSON_ERR         = 20013;
-    const ILLEGAL_PROTOCOL_TYPE  = 20014;
+    public const VALIDATE_SIGNATURE_ERR = 20001;
+    public const COMPUTE_SIGNATURE_ERR  = 20002;
+    public const ILLEGAL_AES_KEY        = 20003;
+    public const VALIDATE_CORP_ID_ERR   = 20004;
+    public const ENCRYPT_AES_ERR        = 20005;
+    public const DECRYPT_AES_ERR        = 20006;
+    public const ILLEGAL_BUFFER         = 20007;
+    public const ENCODE_BASE64_ERR      = 20008;
+    public const DECODE_BASE64_ERR      = 20009;
+    public const PARSE_XML_ERR          = 20010;
+    public const GEN_XML_ERR            = 20011;
+    public const GEN_JSON_ERR           = 20012;
+    public const PARSE_JSON_ERR         = 20013;
+    public const ILLEGAL_PROTOCOL_TYPE  = 20014;
 
-    const ERR_MSG = [
+    public const ERR_MSG = [
         self::VALIDATE_SIGNATURE_ERR => '签名校验失败',
         self::COMPUTE_SIGNATURE_ERR  => '计算签名异常',
         self::ILLEGAL_AES_KEY        => '非法的 AesKey',

@@ -9,11 +9,13 @@ use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\ExternalContact;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\MessagePush\AddMsgTemplate;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\Remark;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\Tag\CorpTag;
+use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\Transfer\TransferCustomer;
+use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\Transfer\TransferResult;
 use Buqiu\EnterpriseWechat\Api\DataStructure\SendMessage;
+use Buqiu\EnterpriseWechat\Constants\Transfer;
 use Buqiu\EnterpriseWechat\Utils\ErrorHelper\ApiError;
 use Buqiu\EnterpriseWechat\Utils\HttpUtils;
 use Buqiu\EnterpriseWechat\Utils\Utils;
-use Exception;
 
 class CorpApi extends Api
 {
@@ -26,7 +28,7 @@ class CorpApi extends Api
      *
      * @param  string     $corpId : 企业 ID
      * @param  string     $secret : 应用的凭证密钥
-     * @throws Exception
+     * @throws \Exception
      */
     public function __construct(string $corpId, string $secret)
     {
@@ -41,7 +43,7 @@ class CorpApi extends Api
     /**
      * 获取 accessToken.
      * @return null|void
-     * @throws Exception
+     * @throws \Exception
      */
     public function getAccessToken()
     {
@@ -142,9 +144,9 @@ class CorpApi extends Api
      * @note 修改客户备注信息
      * @author eva
      *
-     * @param Remark $remark
+     * @param  Remark     $remark
      * @return array
-     * @throws Exception
+     * @throws \Exception
      */
     public function remark(Remark $remark): array
     {
@@ -232,7 +234,7 @@ class CorpApi extends Api
      *
      * @param  mixed      $departmentId
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function getDepartment($departmentId = 0)
     {
@@ -245,7 +247,7 @@ class CorpApi extends Api
      *
      * @param  mixed      $departmentId
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function getUserSimpleList($departmentId)
     {
@@ -258,7 +260,7 @@ class CorpApi extends Api
      *
      * @param $departmentId
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function getUserSimpleDetailList($departmentId)
     {
@@ -271,7 +273,7 @@ class CorpApi extends Api
      *
      * @param $code
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function getUserOpenid($code)
     {
@@ -284,7 +286,7 @@ class CorpApi extends Api
      *
      * @param $code
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function getUserDetail($code)
     {
@@ -297,7 +299,7 @@ class CorpApi extends Api
      *
      * @param $code
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function h5AuthUserInfo($code)
     {
@@ -310,7 +312,7 @@ class CorpApi extends Api
      *
      * @param $userTicket
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
     public function h5AuthUserDetail($userTicket)
     {
@@ -323,21 +325,67 @@ class CorpApi extends Api
      *
      * @param $userId
      * @return mixed
-     * @throws Exception
+     * @throws \Exception
      */
-    public function getUserInfoById($userId)
+    public function getUserInfoById($userId): mixed
     {
         return AddressBook::getUserInfoById($this->getAccessToken(), $userId);
     }
 
     /**
+     * @note 分配成员客户
+     * @author eva
+     *
+     * @param  TransferCustomer $transferCustomer
+     * @param  string           $type
+     * @return TransferCustomer
+     * @throws \Exception
+     */
+    public function transferCustomer(TransferCustomer $transferCustomer, string $type): TransferCustomer
+    {
+        TransferCustomer::checkArgs($transferCustomer);
+        $args = TransferCustomer::handleArgs($transferCustomer);
+        self::_httpCall(Transfer::TRANSFER_TYPE_NORMAL == $type ? self::EXTERNALCONTACT_TRANSFER_CUSTOMER : self::RESIGNED_TRANSFER_CUSTOMER, 'POST', $args);
+
+        return TransferCustomer::handleRsp($this->rspJson);
+    }
+
+    /**
+     * @note 查询客户接替状态
+     * @author eva
+     *
+     * @param  TransferResult $transferResult
+     * @param  string         $type
+     * @return array
+     * @throws \Exception
+     */
+    public function externalcontactTransferResult(TransferResult $transferResult, string $type): array
+    {
+        TransferResult::checkArgs($transferResult);
+        $r = [];
+
+        do {
+            $args = TransferResult::handleArgs($transferResult);
+            self::_httpCall(Transfer::TRANSFER_TYPE_NORMAL == $type ? self::EXTERNALCONTACT_TRANSFER_RESULT : self::RESIGNED_TRANSFER_RESULT, 'POST', $args);
+
+            $row = TransferResult::handleRsp($this->rspJson);
+            $r   = array_merge($r, $row->customers);
+
+            $nextCursor     = $row->cursor;
+            $args['cursor'] = $nextCursor;
+        } while (!empty($nextCursor));
+
+        return $r;
+    }
+
+    /**
      * 刷新 accessToken.
-     * @throws Exception
+     * @throws \Exception
      */
     protected function refreshAccessToken()
     {
         if (!Utils::notEmptyStr($this->corpId) || !Utils::notEmptyStr($this->secret)) {
-            throw new Exception(ApiError::ERR_MSG[ApiError::ILLEGAL_CORP_ID_OR_SECRET]);
+            throw new \Exception(ApiError::ERR_MSG[ApiError::ILLEGAL_CORP_ID_OR_SECRET]);
         }
 
         $url = HttpUtils::makeUrl(self::GET_TOKEN);

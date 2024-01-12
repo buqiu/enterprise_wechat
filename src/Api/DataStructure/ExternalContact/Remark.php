@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact;
 
 use Buqiu\EnterpriseWechat\Utils\Utils;
-use Exception;
 
 class Remark
 {
@@ -46,22 +47,21 @@ class Remark
      * @note 校验参数
      * @author eva
      *
-     * @param Remark $remark
-     * @return void
-     * @throws Exception
+     * @param  Remark     $remark
+     * @throws \Exception
      */
     public static function checkRemarkArgs(Remark $remark)
     {
-        if (!Utils::notEmptyStr($remark->userId) && !Utils::notEmptyStr($remark->externalUserId)) {
-            throw new Exception("user_id, external_user_id both cannot be empty");
-        }
+        Utils::checkNotEmptyStr($remark->userId, 'userid');
+
+        Utils::checkNotEmptyStr($remark->externalUserId, 'external_userid');
     }
 
     /**
      * @note 处理参数
      * @author eva
      *
-     * @param Remark $remark
+     * @param  Remark $remark
      * @return array
      */
     public static function handleRemarkArgs(Remark $remark): array

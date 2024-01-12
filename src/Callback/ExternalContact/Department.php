@@ -30,7 +30,7 @@ class Department
     ];
 
     // 变更企业客户事件
-    public static function change($xmlArray)
+    public static function change($xmlArray): bool|array
     {
         if (!self::preHandel($xmlArray)) {
             return false;

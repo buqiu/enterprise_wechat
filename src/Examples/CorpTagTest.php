@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Buqiu\EnterpriseWechat\Examples;
 
-require dirname(__DIR__) . "/../vendor/autoload.php";
+require dirname(__DIR__).'/../vendor/autoload.php';
 
 use Buqiu\EnterpriseWechat\Api\CorpApi;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\Tag\CorpTag;
-use Exception;
 
-$config = require('./config.php');
+$config = require './config.php';
 $api    = new CorpApi($config['CORP_ID'], $config['CORP_SECRET']);
 
 try {
@@ -29,7 +30,7 @@ try {
 
     // 编辑客户企业标签
     $c                 = new CorpTag();
-    $c->userId         = 'SuHong';
+    $c->userId         = 'eva';
     $c->externalUserId = 'wm2AytCgAA2L8BK2ghke7xJMe9RnL3Ug';
     $c->addTags        = [$tagId];
     $api->markCorpTag($c);
@@ -45,8 +46,8 @@ try {
     $c            = new CorpTag();
     $c->tagIdList = [$tagId];
     $api->delCorpTag($c);
-} catch (Exception $e) {
-    echo $e->getMessage() . "\n";
+} catch (\Exception $e) {
+    echo $e->getMessage()."\n";
 
     if (!empty($tagId)) {
         // 删除客户企业标签
@@ -55,5 +56,3 @@ try {
         $api->delCorpTag($c);
     }
 }
-
-

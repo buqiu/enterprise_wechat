@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Buqiu\EnterpriseWechat\Examples;
 
-require dirname(__DIR__) . "/../vendor/autoload.php";
+require dirname(__DIR__).'/../vendor/autoload.php';
 
 use Buqiu\EnterpriseWechat\Api\CorpApi;
-use Exception;
 use Buqiu\EnterpriseWechat\Api\DataStructure\ExternalContact\ExternalContact;
 
-$config = require('./config.php');
+$config = require './config.php';
 $api    = new CorpApi($config['CORP_ID'], $config['CORP_SECRET']);
 
 try {
@@ -18,7 +19,7 @@ try {
 
     // 获取客户列表
     $e         = new ExternalContact();
-    $e->userId = 'SuHong';
+    $e->userId = 'eva';
     $r         = $api->getExternalContactList($e);
     print_r($r->externalUserList);
 
@@ -30,9 +31,9 @@ try {
 
     // 批量获取客户信息
     $e            = new ExternalContact();
-    $e->userIds[] = 'SuHong';
+    $e->userIds[] = 'eva';
     $r            = $api->batchGetExternalContacts($e);
     print_r($r);
-} catch (Exception $e) {
+} catch (\Exception $e) {
     echo "{$e->getMessage()}\n";
 }

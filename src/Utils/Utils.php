@@ -1,8 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Buqiu\EnterpriseWechat\Utils;
 
-use Exception;
 use Buqiu\EnterpriseWechat\Utils\ErrorHelper\ParamsError;
 
 class Utils
@@ -10,8 +11,7 @@ class Utils
     // 字符串不为空
     public static function notEmptyStr($var): bool
     {
-        $var = trim($var);
-        return !empty($var) && is_string($var);
+        return !empty(trim($var));
     }
 
     // 数组不为空
@@ -24,7 +24,7 @@ class Utils
     public static function checkNotEmptyStr($var, $name)
     {
         if (!self::notEmptyStr($var)) {
-            throw new Exception($name . " " . ParamsError::ERR_MSG[ParamsError::PARAMS_EMPTY]);
+            throw new \Exception($name.' '.ParamsError::ERR_MSG[ParamsError::PARAMS_EMPTY]);
         }
     }
 
@@ -32,13 +32,13 @@ class Utils
     public static function checkNotEmptyArray($var, $name)
     {
         if (!self::notEmptyArr($var)) {
-            throw new Exception($name . ": " . ParamsError::ERR_MSG[ParamsError::PARAMS_EMPTY]);
+            throw new \Exception($name.': '.ParamsError::ERR_MSG[ParamsError::PARAMS_EMPTY]);
         }
     }
 
     /**
      * @param $args
-     * @throws Exception
+     * @throws \Exception
      */
     public static function checkAllEmptyArray($args)
     {
@@ -48,14 +48,14 @@ class Utils
         foreach ($args as $name => $val) {
             try {
                 self::checkNotEmptyArray($val, $name);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $err[] = $name;
-                $i++;
+                ++$i;
             }
         }
 
         if ($count == $i) {
-            throw new Exception(implode(',', $err) . ": " . ParamsError::ERR_MSG[ParamsError::PARAMS_EMPTY]);
+            throw new \Exception(implode(',', $err).': '.ParamsError::ERR_MSG[ParamsError::PARAMS_EMPTY]);
         }
     }
 
@@ -80,6 +80,7 @@ class Utils
     {
         // 禁止引用外部 XML 实体
         libxml_disable_entity_loader(true);
+
         return json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
     }
 }

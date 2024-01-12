@@ -1,12 +1,13 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * @note   服务提供者
  * @author mark
  */
 
 namespace Buqiu\EnterpriseWechat\Provider;
-
-
 
 use Illuminate\Support\ServiceProvider;
 

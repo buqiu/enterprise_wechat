@@ -3,3 +3,4 @@
 /.vscode
 /.DS_Storegit
 /src/Examples/config.php
+/.php-cs-fixer.cache
