@@ -64,6 +64,26 @@ class ExternalContact
     public static int $batchProcessUserLimit = 100;
 
     /**
+     * 用户头像.
+     */
+    public ?string $avatar = null;
+
+    /**
+     * 用户类型.
+     */
+    public ?string $type = null;
+
+    /**
+     * 用户性别.
+     */
+    public ?int $gender = null;
+
+    /**
+     * 昵称.
+     */
+    public ?string $name = null;
+
+    /**
      * @note 处理【获取配置了客户联系功能的成员列表】
      * @author eva
      *
@@ -222,7 +242,11 @@ class ExternalContact
 
         if (array_key_exists('external_contact', $rsp)) {
             $e->externalUserId = $rsp['external_contact']['external_userid'] ?? null;
+            $e->name           = $rsp['external_contact']['name']            ?? null;
             $e->unionId        = $rsp['external_contact']['unionid']         ?? null;
+            $e->avatar         = $rsp['external_contact']['avatar']          ?? null;
+            $e->type           = $rsp['external_contact']['type']            ?? null;
+            $e->gender         = $rsp['external_contact']['gender']          ?? null;
         }
 
         if (Utils::notEmptyArr($rsp['follow_user'] ?? [])) {
@@ -237,7 +261,10 @@ class ExternalContact
                         $tags
                     );
                 } else {
-                    $e->followUserInfo[$item['userid']]['tags'] = $tags;
+                    $e->followUserInfo[$item['userid']]['tags']       = $tags;
+                    $e->followUserInfo[$item['userid']]['remark']     = $item['remark'];
+                    $e->followUserInfo[$item['userid']]['createtime'] = $item['createtime'];
+                    $e->followUserInfo[$item['userid']]['add_way']    = $item['add_way'];
                 }
 
                 if (!empty($item['tags']) && is_array($item['tags'])) {

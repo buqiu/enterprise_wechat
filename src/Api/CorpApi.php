@@ -79,7 +79,7 @@ class CorpApi extends Api
     {
         ExternalContact::checkGetArgs($externalContact);
 
-        $r = ['externalUserId' => '', 'unionId' => '', 'followUserInfo' => [], 'tags' => [], 'followUserIds' => []];
+        $r = ['externalUserId' => '', 'unionId' => '', 'name' => '', 'avatar' => '', 'type' => '', 'gender' => '', 'followUserInfo' => [], 'tags' => [], 'followUserIds' => []];
         do {
             $args = ExternalContact::handleGetArgs($externalContact);
             self::_httpCall(self::GET_EXTERNAL_CONTACT_INFO, 'GET', $args);
@@ -91,11 +91,26 @@ class CorpApi extends Api
             if (empty($r['unionId']) && !empty($externalRow->unionId)) {
                 $r['unionId'] = $externalRow->unionId;
             }
+            if (empty($r['name']) && !empty($externalRow->name)) {
+                $r['name'] = $externalRow->name;
+            }
+            if (empty($r['avatar']) && !empty($externalRow->avatar)) {
+                $r['avatar'] = $externalRow->avatar;
+            }
+            if (empty($r['type']) && !empty($externalRow->type)) {
+                $r['type'] = $externalRow->type;
+            }
+            if (empty($r['gender']) && isset($externalRow->gender)) {
+                $r['gender'] = $externalRow->gender;
+            }
 
             if (!empty($externalRow->followUserInfo)) {
                 foreach ($externalRow->followUserInfo as $userId => $item) {
                     if (empty($r['followUserInfo'][$userId])) {
-                        $r['followUserInfo'][$userId]['own_tags'] = $item['tags'];
+                        $r['followUserInfo'][$userId]['own_tags']   = $item['tags'];
+                        $r['followUserInfo'][$userId]['remark']     = $item['remark'];
+                        $r['followUserInfo'][$userId]['createtime'] = $item['createtime'];
+                        $r['followUserInfo'][$userId]['add_way']    = $item['add_way'];
                     } else {
                         $r['followUserInfo'][$userId]['own_tags'] = array_merge(
                             $r['followUserInfo'][$userId]['own_tags'],
