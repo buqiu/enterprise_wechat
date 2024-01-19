@@ -11,7 +11,7 @@ class Utils
     // 字符串不为空
     public static function notEmptyStr($var): bool
     {
-        return !empty(trim($var));
+        return !empty($var);
     }
 
     // 数组不为空
