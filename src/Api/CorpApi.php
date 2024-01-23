@@ -79,7 +79,8 @@ class CorpApi extends Api
     {
         ExternalContact::checkGetArgs($externalContact);
 
-        $r = ['externalUserId' => '', 'unionId' => '', 'name' => '', 'avatar' => '', 'type' => '', 'gender' => '', 'followUserInfo' => [], 'tags' => [], 'followUserIds' => []];
+        $r = ['externalUserId' => '', 'unionId' => '', 'name' => '', 'avatar' => '', 'type' => '', 'gender' => '', 'corp_name' => '', 'corp_full_name' => '', 'followUserInfo' => [], 'tags' => [], 'followUserIds' => []];
+
         do {
             $args = ExternalContact::handleGetArgs($externalContact);
             self::_httpCall(self::GET_EXTERNAL_CONTACT_INFO, 'GET', $args);
@@ -102,6 +103,12 @@ class CorpApi extends Api
             }
             if (empty($r['gender']) && isset($externalRow->gender)) {
                 $r['gender'] = $externalRow->gender;
+            }
+            if (empty($r['corp_name']) && isset($externalRow->corpName)) {
+                $r['corp_name'] = $externalRow->corpName;
+            }
+            if (empty($r['corp_full_name']) && isset($externalRow->corpFullName)) {
+                $r['corp_full_name'] = $externalRow->corpFullName;
             }
 
             if (!empty($externalRow->followUserInfo)) {

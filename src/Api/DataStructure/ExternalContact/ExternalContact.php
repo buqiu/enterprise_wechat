@@ -84,6 +84,16 @@ class ExternalContact
     public ?string $name = null;
 
     /**
+     * 外部联系人所在企业的简称.
+     */
+    public ?string $corpName = null;
+
+    /**
+     * 外部联系人所在企业的主体名称.
+     */
+    public ?string $corpFullName = null;
+
+    /**
      * @note 处理【获取配置了客户联系功能的成员列表】
      * @author eva
      *
@@ -247,6 +257,8 @@ class ExternalContact
             $e->avatar         = $rsp['external_contact']['avatar']          ?? null;
             $e->type           = $rsp['external_contact']['type']            ?? null;
             $e->gender         = $rsp['external_contact']['gender']          ?? null;
+            $e->corpName       = $rsp['external_contact']['corp_name']       ?? null;
+            $e->corpFullName   = $rsp['external_contact']['corp_full_name']  ?? null;
         }
 
         if (Utils::notEmptyArr($rsp['follow_user'] ?? [])) {
