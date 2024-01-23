@@ -71,7 +71,7 @@ class ExternalContact
     /**
      * 用户类型.
      */
-    public ?string $type = null;
+    public ?int $type = null;
 
     /**
      * 用户性别.
