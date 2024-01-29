@@ -78,8 +78,8 @@ class TransferResult
         if (array_key_exists('customer', $rsp) && Utils::notEmptyArr($rsp['customer'])) {
             foreach ($rsp['customer'] as $item) {
                 $e->customers[$item['external_userid']] = [
-                    'status'        => $item['status'],
-                    'takeover_time' => $item['takeover_time'],
+                    'status'        => $item['status']        ?? null,
+                    'takeover_time' => $item['takeover_time'] ?? null,
                 ];
             }
         }
