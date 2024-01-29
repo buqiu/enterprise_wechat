@@ -115,7 +115,7 @@ class CorpTag
             //            if (isset($tagGroup['deleted']) && $tagGroup['deleted']) {
             //                continue;
             //            }
-            $c->groups[$tagGroup['group_id']] = ['name' => $tagGroup['group_name'], 'deleted' => $tagGroup['deleted'], 'create_time' => $tagGroup['create_time'], 'order' => $tagGroup['order']];
+            $c->groups[$tagGroup['group_id']] = ['name' => $tagGroup['group_name'], 'deleted' => $tagGroup['deleted'] ?? null, 'create_time' => $tagGroup['create_time'], 'order' => $tagGroup['order']];
 
             $c->groups[$tagGroup['group_id']] = ['name' => $tagGroup['group_name']];
 
@@ -136,7 +136,7 @@ class CorpTag
 
                 $c->tags[$item['id']] = [
                     'name'        => $item['name'],
-                    'deleted'     => $item['deleted'],
+                    'deleted'     => $item['deleted'] ?? null,
                     'create_time' => $item['create_time'],
                     'order'       => $item['order'],
                     'group'       => ['id' => $tagGroup['group_id'], 'name' => $tagGroup['group_name']],
