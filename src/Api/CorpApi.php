@@ -355,6 +355,32 @@ class CorpApi extends Api
     }
 
     /**
+     * @note   setUserDepartment 更新用户部门
+     * @author Lu
+     *
+     * @param $userId
+     * @param $departmentArr
+     * @return mixed
+     * @throws \Exception
+     */
+    public function setUserDepartment($userId, $departmentArr)
+    {
+        return AddressBook::setUserDepartment($this->getAccessToken(), $userId, $departmentArr);
+    }
+
+    /**
+     * @note   getUnassignedList 获取待分配的离职成员列表
+     * @author Lu
+     *
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getUnassignedList()
+    {
+        return AddressBook::getUnassignedList($this->getAccessToken());
+    }
+
+    /**
      * @note 分配成员客户
      * @author eva
      *

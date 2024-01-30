@@ -34,6 +34,12 @@ class AddressBook
     // 读取成员
     public const CGI_BIN_USER = 'https://qyapi.weixin.qq.com/cgi-bin/user/get';
 
+    // 更新部门
+    public const UPDATE_USER = 'https://qyapi.weixin.qq.com/cgi-bin/user/update';
+
+    // 获取待分配的离职成员列表
+    public const UNASSIGNED_URL = 'https://qyapi.weixin.qq.com/cgi-bin/externalcontact/get_unassigned_list';
+
     /**
      * @note   getDepartmentList 获取所有部门
      * @author Lu
@@ -180,6 +186,49 @@ class AddressBook
     public static function getUserInfoById($token, $userId)
     {
         $result = HttpUtils::httpGet(self::CGI_BIN_USER.'?access_token='.$token.'&userid='.$userId);
+
+        if (!Utils::notEmptyStr($result)) {
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+        }
+
+        return json_decode($result, true);
+    }
+
+    /**
+     * @note   setUserDepartment 更新用户部门
+     * @author Lu
+     *
+     * @param $token
+     * @param $userId
+     * @param $departmentArr
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function setUserDepartment($token, $userId, $departmentArr)
+    {
+        $result = HttpUtils::httpPost(self::UPDATE_USER.'?access_token='.$token, [
+            'userid'     => $userId,
+            'department' => $departmentArr,
+        ]);
+
+        if (!Utils::notEmptyStr($result)) {
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+        }
+
+        return json_decode($result, true);
+    }
+
+    /**
+     * @note   getUnassignedList 获取待分配的离职成员列表
+     * @author Lu
+     *
+     * @param $token
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function getUnassignedList($token)
+    {
+        $result = HttpUtils::httpPost(self::UNASSIGNED_URL.'?access_token='.$token, []);
 
         if (!Utils::notEmptyStr($result)) {
             throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
