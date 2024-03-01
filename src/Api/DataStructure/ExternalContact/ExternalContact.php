@@ -152,11 +152,11 @@ class ExternalContact
     {
         $e = new ExternalContact();
 
-        if (Utils::notEmptyStr($rsp['next_cursor'])) {
+        if (isset($rsp['next_cursor']) && Utils::notEmptyStr($rsp['next_cursor'])) {
             $e->cursor = $rsp['next_cursor'];
         }
 
-        if (Utils::notEmptyArr($rsp['external_contact_list'])) {
+        if (isset($rsp['external_contact_list']) && Utils::notEmptyArr($rsp['external_contact_list'])) {
             $e->externalUserList = $rsp['external_contact_list'];
         }
 

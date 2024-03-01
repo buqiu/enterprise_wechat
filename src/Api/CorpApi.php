@@ -149,7 +149,7 @@ class CorpApi extends Api
             $args              = ExternalContact::handleBatchGetArgs($external);
             do {
                 self::_httpCall(self::BATCH_GET_EXTERNAL_CONTACTS, 'POST', $args);
-                $tmp = ExternalContact::handleBatchGetRsp($this->rspJson);
+                $tmp = ExternalContact::handleBatchGetRsp($this->rspJson ?: []);
                 if (!is_null($tmp->externalUserList)) {
                     $r = array_merge($r, $tmp->externalUserList);
                 }
