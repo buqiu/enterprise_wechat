@@ -40,11 +40,13 @@ class AddressBook
     // 获取待分配的离职成员列表
     public const UNASSIGNED_URL = 'https://qyapi.weixin.qq.com/cgi-bin/externalcontact/get_unassigned_list';
 
+    public const DEPARTMENT_SHOW_URL = 'https://qyapi.weixin.qq.com/cgi-bin/department/get';
+
     /**
      * @note   getDepartmentList 获取所有部门
      * @author Lu
      *
-     * @param $token
+     * @param             $token
      * @param  int        $departmentId
      * @return mixed
      * @throws \Exception
@@ -66,6 +68,31 @@ class AddressBook
     }
 
     /**
+     * @note getDepartmentShow  获取部门详情
+     * @author Zyy
+     *
+     * @param             $token
+     * @param  int        $departmentId
+     * @return mixed
+     * @throws \Exception
+     */
+    public static function getDepartmentShow($token, int $departmentId = 0): mixed
+    {
+        $parameter = '?access_token='.$token;
+        if (0 != $departmentId) {
+            $parameter .= '&id='.$departmentId;
+        }
+
+        $result = HttpUtils::httpGet(self::DEPARTMENT_SHOW_URL.$parameter);
+
+        if (!Utils::notEmptyStr($result)) {
+            throw new \Exception(ApiError::ERR_MSG[ApiError::RESPONSE_EMPTY]);
+        }
+
+        return json_decode($result, true);
+    }
+
+    /**
      * @note   getUserSimpleList 获取部门下的成员
      * @author Lu
      *
@@ -74,7 +101,7 @@ class AddressBook
      * @return mixed
      * @throws \Exception
      */
-    public static function getUserSimpleList($token, int $departmentId = 0)
+    public static function getUserSimpleList($token, int $departmentId = 0): mixed
     {
         $parameter = '?access_token='.$token;
         if (0 != $departmentId) {
@@ -117,8 +144,8 @@ class AddressBook
      * @note   getUserAuth web端，扫码获取用户信息
      * @author Lu
      *
-     * @param $token
-     * @param $code
+     * @param             $token
+     * @param             $code
      * @return mixed
      * @throws \Exception
      */
@@ -137,8 +164,8 @@ class AddressBook
      * @note   h5AuthUserInfo h5 授权获取用户信息
      * @author Lu
      *
-     * @param $token
-     * @param $code
+     * @param             $token
+     * @param             $code
      * @return mixed
      * @throws \Exception
      */
@@ -157,8 +184,8 @@ class AddressBook
      * @note   h5AuthUserDetail h5 授权获取用户敏感信息
      * @author Lu
      *
-     * @param $token
-     * @param $userTicket
+     * @param             $token
+     * @param             $userTicket
      * @return mixed
      * @throws \Exception
      */
@@ -178,8 +205,8 @@ class AddressBook
      * @note   getUserInfoById 通过用户id，读取用户信息
      * @author Lu
      *
-     * @param $token
-     * @param $userId
+     * @param             $token
+     * @param             $userId
      * @return mixed
      * @throws \Exception
      */
@@ -198,9 +225,9 @@ class AddressBook
      * @note   setUserDepartment 更新用户部门
      * @author Lu
      *
-     * @param $token
-     * @param $userId
-     * @param $departmentArr
+     * @param             $token
+     * @param             $userId
+     * @param             $departmentArr
      * @return mixed
      * @throws \Exception
      */
@@ -222,7 +249,7 @@ class AddressBook
      * @note   getUnassignedList 获取待分配的离职成员列表
      * @author Lu
      *
-     * @param $token
+     * @param             $token
      * @return mixed
      * @throws \Exception
      */

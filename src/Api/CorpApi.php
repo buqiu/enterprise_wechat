@@ -264,6 +264,18 @@ class CorpApi extends Api
     }
 
     /**
+     * @note getDepartmentShow  获取部门详情
+     * @author Zyy
+     * @param  null|int   $departmentId
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getDepartmentShow(?int $departmentId = 0): mixed
+    {
+        return AddressBook::getDepartmentShow($this->getAccessToken(), $departmentId);
+    }
+
+    /**
      * @note   getUserSimpleList 获取成员列表
      * @author Lu
      *
@@ -280,7 +292,7 @@ class CorpApi extends Api
      * @note   getUserSimpleDetailList 获取成员详情
      * @author Lu
      *
-     * @param $departmentId
+     * @param             $departmentId
      * @return mixed
      * @throws \Exception
      */
@@ -293,7 +305,7 @@ class CorpApi extends Api
      * @note   getUserOpenid 获取用户openid
      * @author Lu
      *
-     * @param $code
+     * @param             $code
      * @return mixed
      * @throws \Exception
      */
@@ -306,7 +318,7 @@ class CorpApi extends Api
      * @note   getUserDetail web端，扫码获取用户信息
      * @author Lu
      *
-     * @param $code
+     * @param             $code
      * @return mixed
      * @throws \Exception
      */
@@ -319,7 +331,7 @@ class CorpApi extends Api
      * @note   h5AuthUserInfo h5 授权获取用户信息
      * @author Lu
      *
-     * @param $code
+     * @param             $code
      * @return mixed
      * @throws \Exception
      */
@@ -332,7 +344,7 @@ class CorpApi extends Api
      * @note   h5AuthUserDetail h5 授权获取用户敏感信息
      * @author Lu
      *
-     * @param $userTicket
+     * @param             $userTicket
      * @return mixed
      * @throws \Exception
      */
@@ -345,7 +357,7 @@ class CorpApi extends Api
      * @note   getUserInfoById 通过用户id，读取用户信息
      * @author Lu
      *
-     * @param $userId
+     * @param             $userId
      * @return mixed
      * @throws \Exception
      */
@@ -358,8 +370,8 @@ class CorpApi extends Api
      * @note   setUserDepartment 更新用户部门
      * @author Lu
      *
-     * @param $userId
-     * @param $departmentArr
+     * @param             $userId
+     * @param             $departmentArr
      * @return mixed
      * @throws \Exception
      */
