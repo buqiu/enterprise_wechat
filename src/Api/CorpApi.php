@@ -439,6 +439,25 @@ class CorpApi extends Api
     }
 
     /**
+     * @note 查询客户接替状态分页
+     * @author mark
+     *
+     * @param  TransferResult $transferResult
+     * @param  string         $type
+     * @return TransferResult
+     * @throws \Exception
+     */
+    public function externalcontactTransferPageResult(TransferResult $transferResult, string $type): TransferResult
+    {
+        TransferResult::checkArgs($transferResult);
+
+        $args = TransferResult::handleArgs($transferResult);
+        self::_httpCall(Transfer::TRANSFER_TYPE_NORMAL == $type ? self::EXTERNALCONTACT_TRANSFER_RESULT : self::RESIGNED_TRANSFER_RESULT, 'POST', $args);
+
+        return TransferResult::handleRsp($this->rspJson);
+    }
+
+    /**
      * 刷新 accessToken.
      * @throws \Exception
      */
