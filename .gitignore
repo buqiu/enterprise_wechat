@@ -1,0 +1,10 @@
+/.phpunit.cache
+/node_modules
+/vendor
+.phpunit.result.cache
+/.fleet
+/.idea
+/.vscode
+/docker-compose.yaml
+/.php-cs-fixer.cache
+/Dockerfile
