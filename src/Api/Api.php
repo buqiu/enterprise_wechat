@@ -176,12 +176,16 @@ class Api
             throw new Exception($contents, $response->getStatusCode());
         }
 
-        $contents = json_decode($contents, true);
-        if (isset($contents['errcode']) && $contents['errcode']) {
-            throw new Exception($contents['errmsg'], $contents['errcode']);
+        $result = json_decode($contents, true);
+        if (empty($result) || !is_array($result)) {
+            throw new Exception('api response: '.$contents);
         }
 
-        return $contents;
+        if (isset($result['errcode']) && $result['errcode']) {
+            throw new Exception($result['errmsg'], $result['errcode']);
+        }
+
+        return $result;
     }
 
     /**

@@ -35,7 +35,7 @@ class ArrHelper
     {
         $err = [];
         foreach ($keys as $key) {
-            if (Utils::empty($arr[$key])) {
+            if (ArrHelper::isEmpty($arr, $key)) {
                 $err[] = $key;
             }
         }

@@ -45,7 +45,18 @@ class CustomerSyncCommand extends Command
 
         foreach ($users as $user) {
             $this->line('');
-            $this->performTask($user);
+
+            try {
+                $this->performTask($user);
+            } catch (Exception $exception) {
+                LogHelper::error('user_sync_customer_fail', array_merge($user->toArray(), [
+                    'message' => $exception->getMessage(),
+                    'file'    => $exception->getFile(),
+                    'line'    => $exception->getLine(),
+                    'code'    => $exception->getCode(),
+                ]));
+                $this->error(json_encode($user->toArray(), JSON_UNESCAPED_UNICODE));
+            }
             $bar->advance();
         }
 
