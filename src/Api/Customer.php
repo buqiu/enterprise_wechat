@@ -40,7 +40,7 @@ class Customer extends Api
      * @link https://developer.work.weixin.qq.com/document/path/92994
      * @throws GuzzleException
      */
-    public function batchGetByUser(array $userid_list, ?string $cursor = null, ?int $limit = null): array
+    public function batchGetByUser(array $userid_list, ?string $cursor = null, ?int $limit = 100): array
     {
         $result = $this->httpPostJson('cgi-bin/externalcontact/batch/get_by_user', compact(['userid_list', 'cursor', 'limit']), $this->mergeTokenData());
 

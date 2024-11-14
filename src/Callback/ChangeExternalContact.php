@@ -19,7 +19,7 @@ class ChangeExternalContact extends CallBackAbstract
      */
     public function addExternalContact(): void
     {
-        EnterpriseWechatFacade::customer()->syncUserIdGet($this->data['external_user_id'], $this->data['user_id'], [
+        EnterpriseWechatFacade::customer()->syncUserIdGet($this->data['external_user_id'], (string) $this->data['user_id'], [
             'welcome_code' => $this->data['welcome_code'],
             'state'        => $this->data['state'],
         ]);
@@ -32,7 +32,7 @@ class ChangeExternalContact extends CallBackAbstract
      */
     public function editExternalContact(): void
     {
-        EnterpriseWechatFacade::customer()->syncUserIdGet($this->data['external_user_id'], $this->data['user_id']);
+        EnterpriseWechatFacade::customer()->syncUserIdGet($this->data['external_user_id'], (string) $this->data['user_id']);
     }
 
     /**
@@ -49,7 +49,7 @@ class ChangeExternalContact extends CallBackAbstract
      */
     public function delExternalContact(): void
     {
-        EnterpriseWechatFacade::customer()->delete($this->data['user_id'], $this->data['external_user_id'], $this->data);
+        EnterpriseWechatFacade::customer()->delete((string) $this->data['user_id'], $this->data['external_user_id'], $this->data);
     }
 
     /**
@@ -59,7 +59,7 @@ class ChangeExternalContact extends CallBackAbstract
      */
     public function delFollowUser(): void
     {
-        EnterpriseWechatFacade::customer()->delete($this->data['user_id'], $this->data['external_user_id'], $this->data);
+        EnterpriseWechatFacade::customer()->delete((string) $this->data['user_id'], $this->data['external_user_id'], $this->data);
     }
 
     /**
@@ -70,7 +70,7 @@ class ChangeExternalContact extends CallBackAbstract
     public function transferFail(): array
     {
         TransferCustomerService::syncTransferFail(new TransferResultDto([
-            'takeover_userid'  => $this->data['account_id'],
+            'takeover_userid'  => (string) $this->data['account_id'],
             'external_user_id' => $this->data['external_user_id'],
             'status'           => $this->data['errcode'],
             'takeover_time'    => time(),

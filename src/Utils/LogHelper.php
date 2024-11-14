@@ -47,4 +47,14 @@ class LogHelper
             'permission' => 0666,
         ])->info($message, $context);
     }
+
+    public static function api(mixed $message, array $context = []): void
+    {
+        Log::build([
+            'driver'     => 'single',
+            'path'       => storage_path('logs/'.config('app.name').'/we_api.log'),
+            'level'      => env('LOG_LEVEL', 'debug'),
+            'permission' => 0666,
+        ])->info($message, $context);
+    }
 }

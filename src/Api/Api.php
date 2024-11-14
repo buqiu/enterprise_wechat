@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Buqiu\EnterpriseWechat\Api;
 
+use Buqiu\EnterpriseWechat\Enums\ExceptionCode;
 use Buqiu\EnterpriseWechat\Facades\EnterpriseWechatFacade;
+use Buqiu\EnterpriseWechat\Utils\LogHelper;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -80,7 +82,7 @@ class Api
     public function getHttpClient(): ClientInterface
     {
         if (! ($this->httpClient instanceof ClientInterface)) {
-            $this->httpClient = new Client(['base_uri' => $this->baseUri, 'verify' => false]);
+            $this->httpClient = new Client(['base_uri' => $this->baseUri, 'verify' => false, 'headers' => ['Accept' => 'application/json']]);
         }
 
         return $this->httpClient;
@@ -176,9 +178,14 @@ class Api
             throw new Exception($contents, $response->getStatusCode());
         }
 
+        $contents = mb_convert_encoding($contents, 'UTF-8', 'auto');
+
         $result = json_decode($contents, true);
-        if (empty($result) || !is_array($result)) {
-            throw new Exception('api response: '.$contents);
+
+        if (empty($result) || ! is_array($result)) {
+            LogHelper::api($contents);
+
+            throw new Exception($contents, ExceptionCode::API_CODE->value);
         }
 
         if (isset($result['errcode']) && $result['errcode']) {

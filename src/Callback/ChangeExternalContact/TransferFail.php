@@ -15,8 +15,8 @@ class TransferFail extends CallBackParam
     public static function data(array $data): array
     {
         return [
-            'account_id'       => $data['UserID'] ?? null,
-            'user_id'          => TransferFail::getUserId($data['UserID'] ?? null),
+            'account_id'       => (string) ($data['UserID'] ?? null),
+            'user_id'          => TransferFail::getUserId((string) ($data['UserID'] ?? null)),
             'external_user_id' => $data['ExternalUserID'] ?? null,
             'union_id'         => TransferFail::getUnionId($data['ExternalUserID'] ?? null),
             'fail_reason'      => $data['FailReason'] ?? null,
