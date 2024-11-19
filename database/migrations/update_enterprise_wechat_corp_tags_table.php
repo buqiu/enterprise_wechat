@@ -22,7 +22,8 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void {
+    public function down(): void
+    {
         Schema::table('corp_tags', function (Blueprint $table) {
             $table->integer('group_order')->nullable()->default(0)->comment('标签组排序的次序值')->change();
             $table->integer('order')->nullable()->default(0)->comment('标签排序的次序值')->change();

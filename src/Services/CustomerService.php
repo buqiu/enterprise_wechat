@@ -68,7 +68,7 @@ class CustomerService
      */
     public static function delete(string $user_id, string $external_user_id, ?array $data = []): void
     {
-        $user = User::withCorpId()->whereAccountId($user_id)->first();
+        $user = User::withCorpId()->whereAccountId($user_id)->withTrashed()->first();
         if (! $user) {
             return;
         }

@@ -118,7 +118,7 @@ class SyncService
      */
     public static function deleteCustomer(User $user, string $external_user_id, ?array $data = []): void
     {
-        $customer = Customer::withCorpId()->whereUserId($user->getKey())->whereExternalUserId($external_user_id)->first();
+        $customer = Customer::withCorpId()->whereUserId($user->getKey())->whereExternalUserId($external_user_id)->withTrashed()->first();
         if (! $customer) {
             return;
         }

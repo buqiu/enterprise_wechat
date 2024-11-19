@@ -57,7 +57,7 @@ class ChangeContact extends CallBackAbstract
      */
     public function createUser(): void
     {
-        EnterpriseWechatFacade::user()->syncGet($this->data['user_id']);
+        EnterpriseWechatFacade::user()->syncGet((string) $this->data['user_id']);
     }
 
     /**
@@ -67,7 +67,7 @@ class ChangeContact extends CallBackAbstract
      */
     public function updateUser(): void
     {
-        $this->data['new_user_id'] = UserService::syncNewUser($this->data['user_id'], $this->data['new_user_id']);
+        $this->data['new_user_id'] = UserService::syncNewUser((string) $this->data['user_id'], (string) $this->data['new_user_id']);
 
         EnterpriseWechatFacade::user()->syncGet($this->data['new_user_id']);
     }
@@ -77,6 +77,6 @@ class ChangeContact extends CallBackAbstract
      */
     public function deleteUser(): void
     {
-        UserService::delete($this->data['user_id']);
+        UserService::delete((string) $this->data['user_id']);
     }
 }
