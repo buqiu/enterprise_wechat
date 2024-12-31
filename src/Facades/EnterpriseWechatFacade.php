@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static strategy()
  * @method static welcome()
  * @method static moment()
+ * @method static contactWay()
  */
 class EnterpriseWechatFacade extends Facade
 {

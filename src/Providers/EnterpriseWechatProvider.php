@@ -59,8 +59,8 @@ class EnterpriseWechatProvider extends ServiceProvider
         }
 
         foreach (iterator_to_array(
-                     Finder::create()->files()->in(__DIR__.'/../../database/migrations')->depth(0)->sortByChangedTime(),
-                     false) as $index => $file) {
+            Finder::create()->files()->in(__DIR__.'/../../database/migrations')->depth(0)->sortByChangedTime(),
+            false) as $index => $file) {
             $this->publishes([$file->getRealPath() => $this->getMigrationFileName($file->getBasename(), $index)], 'enterprise_wechat-migrations');
         }
     }

@@ -64,5 +64,5 @@ php artisan enterprise-wechat:user-resign:sync "账号Code"
 
 ### 清洗数据
 ```shell
-php artisan enterprise-wechat:customer:clean dev_helix_app --chunk='块大小: 默认10000' --sleep='休眠时间: 默认 10 秒' --clean-version='清理版本号: 默认1'
+php artisan enterprise-wechat:customer:clean "账号Code" --chunk='块大小: 默认10000' --sleep='休眠时间: 默认 10 秒' --clean-version='清理版本号: 默认1'
 ```
