@@ -103,19 +103,16 @@ class DepartmentDto extends Dto
         if (Utils::notEmpty($this->getId())) {
             $department->department_id = $this->getId();
         }
-        if (Utils::notEmpty($this->getParentid())) {
-            $department->parent_id = $this->getParentid();
-        }
         if (Utils::notEmpty($this->getName())) {
             $department->name = $this->getName();
         }
         if (Utils::notEmpty($this->getNameEn())) {
             $department->name_en = $this->getNameEn();
         }
-        if (Utils::notEmpty($this->getDepartmentLeader())) {
+        if ($this->issetParam('department_leader')) {
             $department->department_leader = $this->getDepartmentLeader();
         }
-        if (Utils::notEmpty($this->getParentid())) {
+        if ($this->issetParam('parent_id')) {
             $department->parent_id = $this->getParentid();
         }
         if (Utils::notEmpty($this->getOrder())) {

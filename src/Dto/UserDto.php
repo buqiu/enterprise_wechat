@@ -328,10 +328,10 @@ class UserDto extends Dto
         if (Utils::notEmpty($this->getBizMail())) {
             $user->biz_mail = $this->getBizMail();
         }
-        if (Utils::notEmpty($this->getIsLeaderInDept())) {
+        if ($this->issetParam('is_leader_in_dept')) {
             $user->is_leader_in_dept = $this->getIsLeaderInDept();
         }
-        if (Utils::notEmpty($this->getDirectLeader())) {
+        if ($this->issetParam('direct_leader')) {
             $user->direct_leader = $this->getDirectLeader();
         }
         if (Utils::notEmpty($this->getAvatar())) {
